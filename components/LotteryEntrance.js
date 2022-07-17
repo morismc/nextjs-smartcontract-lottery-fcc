@@ -12,6 +12,8 @@ export default function LotteryEntrance() {
     // console.log(`ChainId is ${chainId}`)
     const raffleAddress = chainId in contractAddresses ? contractAddresses[chainId][0] : null
 
+    console.log(chainId)
+
     // State hooks
     // https://stackoverflow.com/questions/58252454/react-hooks-using-usestate-vs-just-variables
     const [entranceFee, setEntranceFee] = useState("0")
@@ -57,12 +59,6 @@ export default function LotteryEntrance() {
     })
 
     async function updateUIValues() {
-        // Another way we could make a contract call:
-        // const options = { abi, contractAddress: raffleAddress }
-        // const fee = await Moralis.executeFunction({
-        //     functionName: "getEntranceFee",
-        //     ...options,
-        // })
         const entranceFeeFromCall = (await getEntranceFee()).toString()
         const numPlayersFromCall = (await getPlayersNumber()).toString()
         const recentWinnerFromCall = await getRecentWinner()
@@ -99,7 +95,9 @@ export default function LotteryEntrance() {
         })
     }
 
-    // Probably could add some error handling
+    // Wird aufgerufen, wenn enterRaffle funktioniert hat
+    // Soll Anzahl der Benutzer etc. aktualisieren
+    // Soll einen Info-Dialog ausgeben
     const handleSuccess = async (tx) => {
         await tx.wait(1)
         updateUIValues()
